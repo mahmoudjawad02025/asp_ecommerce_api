@@ -14,7 +14,7 @@
 | [/api/Identity/Authentication/forgot-password](#apiidentityauthenticationforgot-password) | `POST` | Initiate password recovery |
 | [/api/Identity/Authentication/reset-password](#apiidentityauthenticationreset-password) | `POST` | Reset password using recovery code |
 | **🛒 Customer: Shopping Cart** | | |
-| [/api/customer/Cart](#apicustomercart) | `POST` | Update items in the cart |
+| [/api/customer/Cart](#apicustomercart) | `POST` | Add an item to the cart |
 | [/api/customer/Cart](#apicustomercart) | `GET` | Retrieve current cart items |
 | **💳 Customer: Checkout & Reviews** | | |
 | [/api/customer/CheckOuts/payment](#apicustomercheckoutspayment) | `POST` | Process checkout and payment |
@@ -27,14 +27,14 @@
 | [/api/customer/Brands/{id}](#apicustomerbrandsid) | `GET` | Get brand information |
 | **📦 Admin: Order Management** | | |
 | [/api/admin/Orders/status/{status}](#apiadminordersstatusstatus) | `GET` | Filter and view all system orders |
-| [/api/admin/Orders/change-status/{orderId}](#apiadminorderschange-statusorderid) | `PATCH` | Update order fulfillment status |
+| [/api/admin/Orders/change-status/{orderId}](#apiadminorderschange-statusorderid) | `PATCH` | Change order status |
 | **👤 Admin: User Management** | | |
-| [/api/customer/Users](#apicustomerusers) | `GET` | List all registered users |
-| [/api/customer/Users/{id}](#apicustomerusersid) | `GET` | View detailed user profile |
-| [/api/customer/Users/block/{userId}](#apicustomerusersblockuserid) | `PATCH` | Restrict user access (Block) |
-| [/api/customer/Users/unblock/{userId}](#apicustomerusersunblockuserid) | `PATCH` | Restore user access (Unblock) |
-| [/api/customer/Users/isblock/{userId}](#apicustomerusersisblockuserid) | `PATCH` | Verify user restriction status |
-| [/api/customer/Users/changeRole/{userId}](#apicustomeruserschangeroleuserid) | `PATCH` | Manage user permissions/roles |
+| [/api/admin/Users](#apiadminusers) | `GET` | List all registered users |
+| [/api/admin/Users/{id}](#apiadminusersid) | `GET` | View detailed user profile |
+| [/api/admin/Users/block/{userId}](#apiadminusersblockuserid) | `PATCH` | Restrict user access (Block) |
+| [/api/admin/Users/unblock/{userId}](#apiadminusersunblockuserid) | `PATCH` | Restore user access (Unblock) |
+| [/api/admin/Users/isblock/{userId}](#apiadminusersisblockuserid) | `PATCH` | Verify user restriction status |
+| [/api/admin/Users/changeRole/{userId}](#apiadminuserschangeroleuserid) | `PATCH` | Manage user permissions/roles |
 | **📂 Admin: Category Management** | | |
 | [/api/admin/Category/GetAll](#apiadmincategorygetall) | `GET` | Retrieve all categories (Admin list) |
 | [/api/admin/Category/Get/{id}](#apiadmincategorygetid) | `GET` | Get details of a specific category |
@@ -53,7 +53,7 @@
 | [/api/admin/Product](#apiadminproduct) | `GET` | List products with Pagination (pageNumber, pageSize) |
 | [/api/admin/Product](#apiadminproduct) | `POST` | Upload and create a new product |
 | **📊 Admin: Reports** | | |
-| [/api/admin/Reports](#apiadminreports) | `GET` | Generate sales and user activity reports |
+| [/api/admin/Reports](#apiadminreports) | `GET` | Download a PDF of product id and name |
 
 <br>
 <hr>
