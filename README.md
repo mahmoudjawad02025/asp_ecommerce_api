@@ -1,11 +1,8 @@
-# 🛒 E-Commerce API — ASP.NET Core (Clean Architecture)
+# 🛒 E-Commerce API — ASP.NET Core (3-Layer)
 
-A clean, scalable 3-layer architecture (DAL → BLL → PL) built for modern e-commerce applications, featuring generic CRUD, JWT authentication, cart & order management, and product/media handling.
+A 3-layer Web API (DAL → BLL → PL) with a generic repository, JWT authentication, cart and checkout, and product image uploads.
 
 ![.NET](https://img.shields.io/badge/.NET-9.0-blue)
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-green)
-
 
 <hr>
 <br>
@@ -24,99 +21,64 @@ A clean, scalable 3-layer architecture (DAL → BLL → PL) built for modern e-c
 - [📘 API Documentation](#-api-documentation)
 - [📞 Contact](#-contact)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <br>
 <hr>
 <br>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 🚀 Overview
-The **E-Commerce API** provides a production-ready backend foundation for online retail. It manages everything from complex product catalogs with multi-image support to secure administrative control and customer shopping workflows.
+The **E-Commerce API** is a backend for products, cart, checkout, reviews, and admin tasks.
+
+1. Built a REST API with 37 endpoints across 12 controllers using ASP.NET Core 9 and EF Core (Code First, SQL Server), in a 3-layer layout (DAL/BLL/PL) with dependency injection, a generic repository, and Mapster DTO mapping. OpenAPI is exposed in Development through Scalar. There is no global exception handler.
+
+2. Implemented JWT authentication with role checks for `customer`, `admin`, and `superAdmin`, plus email confirmation, forgot/reset password, and admin user management (block, unblock, and role change).
+
+3. Admin product list with pagination and create with a main image plus extra images; customer cart add and cart summary; checkout with Cash and Visa (Stripe); customer review submit with a rating. Admin CRUD for brands and categories, order list by status and status updates (Pending, Cancelled, Approved, Shipped, Delivered). One admin PDF lists product id and name.
 
 <br>
 
 ## 🧩 Key Features
-* 🔐 **Secure Identity:** JWT-based Auth with Role-Based Access Control (Customer/Admin/SuperAdmin).
-* 🛍️ **Catalog Management:** Advanced CRUD for Products, Categories, and Brands.
-* 🖼️ **Media Handling:** Multi-image uploads and management for products.
-* 🛒 **Shopping Workflow:** Fully functional Cart system and Checkout logic.
-* 📦 **Order Tracking:** Admin-facing order status management and reporting.
-* ⚡ **Performance:** Optimized with Generic Repository patterns and DTO mapping.
-* 📝 **Reviews:** Integrated customer feedback and rating system.'
+* 🔐 **Identity:** JWT auth with roles `customer`, `admin`, and `superAdmin`. Email confirmation is required. Forgot-password and reset-password endpoints exist.
+* 🛍️ **Catalog:** Categories and brands support create, read, update, delete, and status toggle. Products support an admin paginated list and create only.
+* 🖼️ **Media:** Product create accepts one main image and a list of extra images.
+* 🛒 **Cart and checkout:** A customer can add a cart item and get a cart summary. Checkout supports Cash and Visa (Stripe Checkout), plus a payment-success endpoint.
+* 📦 **Orders and report:** Admins can list orders by status and change status. The report endpoint returns a PDF of product id and name.
+* 🗂️ **Data access:** Generic repository for some entities, and Mapster mapping in several services.
+* 📝 **Reviews:** A customer can submit a comment and a rating. There is no list, update, or delete review endpoint.
 
 <br>
 
 ## 🚀 Tech Stack
-* Swagger / OpenAPI
 * **Framework:** ASP.NET Core 9 (Web API)
 * **ORM:** Entity Framework Core (Code First)
 * **Database:** SQL Server
 * **Security:** JWT Bearer Authentication
-* **Documentation:** Swagger / OpenAPI
-* **Architecture:** 3-Layer (Clean) Architecture
+* **Documentation:** OpenAPI and Scalar in Development. There is no Swagger UI.
+* **Architecture:** 3-layer (DAL / BLL / PL). The PL project references DAL.
+* **Mapping:** Mapster
 * **Dependency Injection**
 
 <br>
 
 ## 📐 Architecture
-This project follows a **3-Layer Architecture**:
+This project follows a **3-layer architecture**:
 ```
 PL  → Controllers / API
 BLL → Business Logic & Services
 DAL → Data Access (EF Core + Repositories)
 ```
-Each layer is **fully isolated** and communicates via **interfaces only**.
+Controllers call BLL service interfaces. PL also references DAL for DTOs and models. `ReportsController` injects the `ReportService` class directly.
 
 <br>
 
 ## 📁 Project Structure
 ```plaintext
-Nibras.API
+Ecommerce_App
 │
 ├── DAL
 │   ├── Data_Base
 │   │   ├── Migrations
-│   │   ├── ApplicationDbContext.cs
-|   ├── DTO
+│   │   └── ApplicationDbContext.cs
+│   ├── DTO
 │   ├── Models
 │   ├── Utils
 │   └── Repositories
@@ -132,57 +94,15 @@ Nibras.API
     ├── Areas (Controllers)
     │   ├── Admin
     │   ├── Identity
-    |   └── Customer
+    │   └── Customer
     ├── Utils
     ├── appsettings.json
     └── Program.cs
-
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <br>
 <hr>
 <br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## 🔑 Authentication Flow
 
@@ -192,78 +112,32 @@ Authentication is implemented using **JWT Bearer Tokens**.
 Authorization: Bearer <token>
 ```
 
-Login → JWT access token  
-Token validation handled via JWT Bearer middleware  
+Register can send a confirmation email. Login returns a JWT access token after the email is confirmed. Token validation is handled by JWT Bearer middleware. Issuer and audience checks are turned off.
 
 <br>
 
 ## 📦 API Modules
 
-* **Authentication & Identity:** User registration, login, and secure password management.
-* **Admin - Product Management:** Inventory control, creation, and stock visibility status.
-* **Admin - Category Management:** Organization of product hierarchies and status toggles.
-* **Admin - Brand Management:** Partner brand profiles and visibility control.
-* **Admin - Order Management:** Fulfillment tracking and order status updates.
-* **Admin - Reports:** Sales analytics and user activity data.
-* **Customer - Shopping Experience:** Cart management, product browsing, and category viewing.
-* **Customer - Checkout:** Payment processing and order success verification.
-* **Customer - Reviews:** Product ratings and review submissions.
-* **User Management:** Administrative control over user roles and account access (Block/Unblock).
+* **Authentication:** Register, login, confirm email, forgot password, and reset password.
+* **Admin - Products:** Paginated list and create (main image and extra images). No update or delete product endpoint.
+* **Admin - Categories:** Create, read, update, delete, and status toggle. Categories are a flat list.
+* **Admin - Brands:** Create, read, update, delete, and status toggle.
+* **Admin - Orders:** List orders by status and change status (`Pending`, `Cancelled`, `Approved`, `Shipped`, `Delivered`). No carrier or tracking endpoint.
+* **Admin - Reports:** PDF of product id and name. Not a sales or user-activity report.
+* **Customer - Browse and cart:** List and get brands and categories. Add a cart item and get the cart summary. There is no customer product-catalog endpoint.
+* **Customer - Checkout:** Cash, or Visa through Stripe Checkout, plus a success endpoint.
+* **Customer - Reviews:** Submit a product rating and comment.
+* **User management:** List users, get one user, block, unblock, check block status, and change role.
 
 <br>
 
 ## ❌ Error Handling
 
-* Centralized exception handling
-* Standard HTTP status codes
-* Consistent response format
-
-```json
-{
-  "message": "Validation failed"
-}
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+There is no global exception middleware. Several services throw `Exception`. Many actions return `200 OK`. Checkout can return `200` with `Success: false` when the cart is empty.
 
 <br>
 <hr>
 <br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <a name="setup"></a>
 ## ⚙️ Getting Started
@@ -271,72 +145,52 @@ Token validation handled via JWT Bearer middleware
 ### Prerequisites
 - .NET SDK 9.0
 - SQL Server
-- Visual Studio 2022+
 
 ### Installation
-git clone ...
-dotnet restore
+From the repository folder:
+
+```
+dotnet restore Ecommerce_App.sln
+```
 
 ### Database Setup
-update-database
+Pending EF Core migrations run on startup. You can also update the database from the repository folder:
+
+```
+dotnet ef database update --project DAL --startup-project PL
+```
 
 ### Run Application
-dotnet run
+```
+dotnet run --project PL
+```
 
 ### API Access
-https://localhost:{port}/swagger
+In Development the Scalar UI is at:
+
+```
+https://localhost:7050/scalar
+```
+
+OpenAPI is mapped in Development. There is no `/swagger` page.
 
 <br>
 
 ## 🔐 Environment Variables
 
-Configure the following in `appsettings.json` or environment variables:
+Set these in `appsettings.json` or as environment variables. Do not commit real secrets.
 
-| Key                                   | Description                  |
-|--------------------------------------|------------------------------|
-| ConnectionStrings:DefaultConnection  | SQL Server connection string |
-| jwtOptions:SecretKey                 | JWT signing secret key       |
+| Key                                  | Description                                      |
+|--------------------------------------|--------------------------------------------------|
+| ConnectionStrings:DefaultConnection  | SQL Server connection string                     |
+| jwtOptions:SecretKey                 | JWT signing secret key                           |
+| Stripe:SecretKey                     | Stripe secret key used for Visa checkout         |
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SMTP settings for confirmation and password emails are hardcoded in `PL/Utils/EmailSending.cs`. They are not read from configuration.
 
 <br>
 <hr>
 <br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## 📘 API Documentation
 [To see the api document of this project click here](./Docs/Api_Document.md)
