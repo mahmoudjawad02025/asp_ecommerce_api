@@ -1,6 +1,6 @@
 # 🛒 E-Commerce API — ASP.NET Core (3-Layer)
 
-A 3-layer Web API (DAL → BLL → PL) with a generic repository, JWT authentication, cart and checkout, and product image uploads.
+A scalable, 3-layer Web API (DAL → BLL → PL) with a generic repository, JWT authentication, cart and checkout, and product image uploads.
 
 ![.NET](https://img.shields.io/badge/.NET-9.0-blue)
 
@@ -37,6 +37,7 @@ The **E-Commerce API** is a backend for products, cart, checkout, reviews, and a
 <br>
 
 ## 🧩 Key Features
+* 📈 **Scalable architecture:** The 3-layer separation (DAL / BLL / PL), dependency injection, and a generic repository make it easy to add new features and grow the system.
 * 🔐 **Identity:** JWT auth with roles `customer`, `admin`, and `superAdmin`. Email confirmation is required. Forgot-password and reset-password endpoints exist.
 * 🛍️ **Catalog:** Categories and brands support create, read, update, delete, and status toggle. Products support an admin paginated list and create only.
 * 🖼️ **Media:** Product create accepts one main image and a list of extra images.
